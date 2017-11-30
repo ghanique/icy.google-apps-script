@@ -2,8 +2,19 @@ function Thermostat(username, password) {
   this.apiroute = "https://portal.icy.nl";
   this.username = username;
   this.password = password;
-  this.token = "";
-  this.uid = "";
+
+  this.getToken = function () {
+    return PropertiesService.getScriptProperties().getProperty("token");
+  }
+  this.setToken = function (value) {
+    return PropertiesService.getScriptProperties().setProperty("token", value);
+  }
+  this.getUid = function () {
+    return PropertiesService.getScriptProperties().getProperty("uid");
+  }
+  this.setUid = function (value) {
+    return PropertiesService.getScriptProperties().setProperty("uid", value);
+  }
 
   this.refreshToken = function () {
     var url = this.apiroute + "/login";
@@ -23,8 +34,8 @@ function Thermostat(username, password) {
     if (result.getResponseCode() == 200) {
       var contentText = result.getContentText();
       var json = JSON.parse(contentText);
-      this.token = json.token;
-      this.uid = json.serialthermostat1;
+      this.setToken(json.token);
+      this.setUid(json.serialthermostat1);
     } else {
       Logger.log("Error occured logging in. Response code: " + result.getResponseCode());
     }
@@ -34,7 +45,7 @@ function Thermostat(username, password) {
     var url = this.apiroute + "/data";
 
     var headers = {
-      'Session-token': this.token
+      'Session-token': this.getToken()
     };
 
     var options = {
@@ -76,11 +87,11 @@ function Thermostat(username, password) {
     var url = this.apiroute + "/data";
 
     var headers = {
-      'Session-token': this.token
+      'Session-token': this.getToken()
     };
 
     var payload = {
-      uid: this.uid,
+      uid: this.getUid(),
       temperature1: temp
     }
 

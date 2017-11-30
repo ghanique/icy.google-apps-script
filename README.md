@@ -29,3 +29,11 @@ The class will use your credentials to refresh the `session-token` and `uid` if 
 If that fails it will give up.
 
 The file `Main.gs` demonstrates how you can use this class to get and set the temperature.
+
+Script Properties
+-----------------
+
+Google Docs have Properties.
+You can view and edit them by going to the Script Editor (File / Project Properties).
+
+The class stores the `session-token` and `uid` in the Project's `Script Properties`, so that it can recycle these values even between multiple instances of the class.
