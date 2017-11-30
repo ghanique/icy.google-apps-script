@@ -1,0 +1,198 @@
+{
+	"info": {
+		"name": "E-Thermostaat",
+		"_postman_id": "145adb80-01bc-6bb7-1f6f-28d57309f8ad",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var data = JSON.parse(responseBody);",
+							"",
+							"pm.test(\"response is ok\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.environment.set(\"token\", data.token);",
+							"pm.environment.set(\"uid\", data.serialthermostat1);",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "{{username}}",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "{{password}}",
+							"description": "",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://portal.icy.nl/login",
+					"protocol": "https",
+					"host": [
+						"portal",
+						"icy",
+						"nl"
+					],
+					"path": [
+						"login"
+					]
+				},
+				"description": "Log in with a `username` and `password` and retrieve the `session-token` and the `serial`."
+			},
+			"response": []
+		},
+		{
+			"name": "Get Data",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"response is ok\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// example using response assertions",
+							"pm.test(\"response should be okay to process\", function () { ",
+							"    pm.response.to.not.be.error; ",
+							"    pm.response.to.have.jsonBody(\"\"); ",
+							"    pm.response.to.not.have.jsonBody(\"error\"); ",
+							"});",
+							"",
+							"pm.test(\"there is a temperature1\", function () {",
+							"    pm.expect(typeof pm.response.json().temperature1 == 'undefined').to.be.false;",
+							"});",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Session-token",
+						"value": "{{token}}"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "your_username",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "your_password",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "uid",
+							"value": "3825925003595",
+							"description": "",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://portal.icy.nl/data",
+					"protocol": "https",
+					"host": [
+						"portal",
+						"icy",
+						"nl"
+					],
+					"path": [
+						"data"
+					]
+				},
+				"description": "Get all data from the thermostat"
+			},
+			"response": []
+		},
+		{
+			"name": "Set Temperature",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"response is ok\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Session-token",
+						"value": "{{token}}"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "uid",
+							"value": "{{uid}}",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "temperature1",
+							"value": "20",
+							"description": "",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://portal.icy.nl/data",
+					"protocol": "https",
+					"host": [
+						"portal",
+						"icy",
+						"nl"
+					],
+					"path": [
+						"data"
+					]
+				},
+				"description": "Get all data from the thermostat"
+			},
+			"response": []
+		}
+	]
+}
